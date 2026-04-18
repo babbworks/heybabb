@@ -8,7 +8,7 @@ A command line companion for Babb Works. Ask questions, explore tools, and find 
 
 ```bash
 git clone https://github.com/babbworks/heybabb
-cd babb-cli
+cd heybabb
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .

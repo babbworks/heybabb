@@ -3,10 +3,10 @@ from rich.console import Console
 
 from babb import knowledge as k
 from babb import responses
-from babb.commands import ask
+from babb.commands import ask, sync, vision
 
 app = typer.Typer(
-    name="babb",
+    name="heybabb",
     help="Babb — your guide to Babb Works.",
     no_args_is_help=False,
     invoke_without_command=True,
@@ -15,6 +15,8 @@ app = typer.Typer(
 console = Console()
 
 app.add_typer(ask.app, name="ask")
+app.add_typer(sync.app, name="sync")
+app.add_typer(vision.app, name="vision")
 
 
 @app.callback(invoke_without_command=True)
@@ -51,6 +53,6 @@ def version():
     """Show build info."""
     knowledge = k.load()
     built = knowledge.get("built_at", "unknown")
-    org = knowledge.get("org", "unknown")
     tool_count = len(knowledge.get("tools", []))
-    console.print(f"[cyan]babb[/cyan] 0.1.0  |  org: {org}  |  {tool_count} tool(s) indexed  |  built {built[:10] if built else 'never'}")
+    org = knowledge.get("org", "unknown")
+    console.print(f"[cyan]heybabb[/cyan] 0.1.0  |  org: {org}  |  {tool_count} tool(s) indexed  |  built {built[:10] if built else 'never'}")

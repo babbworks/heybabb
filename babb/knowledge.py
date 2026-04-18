@@ -6,7 +6,7 @@ _DIST = Path(__file__).parent.parent / "dist" / "knowledge.json"
 
 def load() -> dict:
     if not _DIST.exists():
-        return {"tools": [], "now": "", "org": "babbworks", "built_at": None}
+        return {"tools": [], "now": "", "org": "babbworks", "built_at": None, "qa": [], "lore": [], "announcement": None}
     with open(_DIST) as f:
         return json.load(f)
 

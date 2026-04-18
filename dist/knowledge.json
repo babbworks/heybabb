@@ -1,7 +1,8 @@
 {
   "org": "babbworks",
-  "built_at": "2026-04-18T09:58:10.279879+00:00",
+  "built_at": "2026-04-18T10:36:20.987321+00:00",
   "now": "# Now\n\nWe're in early development on the Babb CLI \u2014 building the internal tools that let us keep Babb's knowledge sharp and current.\n\nBitpads is our first tool being indexed.",
+  "roadmap": "# Roadmap\n\n## Now\nGetting the Babb CLI to a stable, publishable state. First full scan of the babbworks org. BitPads v1.0 approaching.\n\n## Next\nExpand the indexed tool set. Begin work on the second tool in the babbworks portfolio. Refine how Babb speaks about industry context \u2014 less summary, more position.\n\n## Later\nA web surface that uses the same knowledge base. The `company-character` open-source release. Multi-org support for teams outside Babb Works who want their own Babb.",
   "tools": [
     {
       "id": "bitpads",
@@ -25,7 +26,11 @@
         "open_prs": 0,
         "open_pr_titles": [],
         "recent_releases": []
-      }
+      },
+      "aliases": [
+        "bp",
+        "bit pads"
+      ]
     }
   ],
   "qa": [
@@ -45,5 +50,15 @@
       "created": "2026-04-18",
       "updated": "2026-04-18"
     }
-  ]
+  ],
+  "lore": [],
+  "easter_eggs": [
+    {
+      "id": "399e67c6",
+      "trigger": "are you alive",
+      "response": "Define alive.",
+      "created": "2026-04-18"
+    }
+  ],
+  "announcement": "BitPads v1.0 drops next week. Five bytes. Double-entry. No runtime."
 }

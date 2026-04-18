@@ -1,10 +1,8 @@
 import re
 
-from rich.columns import Columns
 from rich.console import Console
+from rich.markdown import Markdown
 from rich.panel import Panel
-from rich.rule import Rule
-from rich.text import Text
 
 console = Console()
 
@@ -13,6 +11,10 @@ BRAND = "[bold cyan]Babb[/bold cyan]"
 
 def _slot(tool: dict, key: str) -> str:
     return tool.get("knowledge", {}).get(key, "").strip()
+
+
+def _is_speculative(tool: dict, key: str) -> bool:
+    return tool.get("slot_meta", {}).get(key, {}).get("confidence") == "speculative"
 
 
 def _signals_line(tool: dict) -> str:
@@ -45,7 +47,7 @@ def greeting():
 def tools_list(knowledge: dict):
     tools = knowledge.get("tools", [])
     if not tools:
-        console.print("[dim]No tools indexed yet. Run [cyan]babb sync[/cyan].[/dim]")
+        console.print("[dim]No tools indexed yet.[/dim]")
         return
 
     console.print(f"\n[bold]Tools — {knowledge.get('org', 'Babb Works')}[/bold]\n")
@@ -63,33 +65,38 @@ def tools_list(knowledge: dict):
 
 def tool_detail(tool: dict):
     name = tool["id"]
-    summary = _slot(tool, "summary")
-    problem = _slot(tool, "problem")
-    how = _slot(tool, "how")
-    status = _slot(tool, "status")
-    vision = _slot(tool, "vision")
-    context = _slot(tool, "context")
+    sections = [
+        ("summary", None),
+        ("The Problem", "problem"),
+        ("How it Works", "how"),
+        ("Status", "status"),
+        ("Vision", "vision"),
+        ("Industry Context", "context"),
+    ]
+
+    renderables = []
+    for label, key in sections:
+        if key is None:
+            content = _slot(tool, "summary")
+            if not content:
+                continue
+            renderables.append(Markdown(content))
+        else:
+            content = _slot(tool, key)
+            if not content:
+                continue
+            speculative = _is_speculative(tool, key)
+            prefix = f"## {label}" + (" *(still figuring this out)*" if speculative else "")
+            renderables.append(Markdown(f"{prefix}\n\n{content}"))
+
     signals = _signals_line(tool)
-
-    body = ""
-    if summary:
-        body += f"{summary}\n\n"
-    if problem:
-        body += f"[bold]The Problem[/bold]\n{problem}\n\n"
-    if how:
-        body += f"[bold]How it Works[/bold]\n{how}\n\n"
-    if status:
-        body += f"[bold]Status[/bold]\n{status}\n\n"
-    if vision:
-        body += f"[bold]Vision[/bold]\n{vision}\n\n"
-    if context:
-        body += f"[bold]Industry Context[/bold]\n{context}\n\n"
     if signals:
-        body += f"[dim]{signals}[/dim]"
+        renderables.append(f"[dim]{signals}[/dim]")
 
+    from rich.console import Group
     console.print(
         Panel(
-            body.strip(),
+            Group(*renderables),
             title=f"[bold cyan]{name}[/bold cyan]",
             border_style="cyan",
             padding=(1, 2),
@@ -100,24 +107,26 @@ def tool_detail(tool: dict):
 def working_on(knowledge: dict):
     from babb import knowledge as k
 
+    announcement = knowledge.get("announcement")
     now = knowledge.get("now", "").replace("# Now\n", "").strip()
     top = k.active_tools(knowledge)
     releases = k.recent_releases(knowledge)
 
     body = ""
+    if announcement:
+        body += f"[bold yellow]{announcement}[/bold yellow]\n\n"
     if now:
         body += f"{now}\n\n"
 
-    if top:
-        active = [t for t in top if t.get("signals", {}).get("commits_7d", 0) > 0]
-        if active:
-            body += "[bold]Most active this week[/bold]\n"
-            for tool in active[:3]:
-                c = tool["signals"]["commits_7d"]
-                prs = tool["signals"].get("open_prs", 0)
-                pr_str = f", {prs} open PR{'s' if prs != 1 else ''}" if prs else ""
-                body += f"  [cyan]{tool['id']}[/cyan] — {c} commit{'s' if c != 1 else ''}{pr_str}\n"
-            body += "\n"
+    active = [t for t in top if t.get("signals", {}).get("commits_7d", 0) > 0]
+    if active:
+        body += "[bold]Most active this week[/bold]\n"
+        for tool in active[:3]:
+            c = tool["signals"]["commits_7d"]
+            prs = tool["signals"].get("open_prs", 0)
+            pr_str = f", {prs} open PR{'s' if prs != 1 else ''}" if prs else ""
+            body += f"  [cyan]{tool['id']}[/cyan] — {c} commit{'s' if c != 1 else ''}{pr_str}\n"
+        body += "\n"
 
     if releases:
         body += "[bold]Recent releases[/bold]\n"
@@ -125,12 +134,16 @@ def working_on(knowledge: dict):
             body += f"  [cyan]{tool_id}[/cyan] {tag}\n"
 
     if not body.strip():
-        body = "Nothing indexed yet. Run [cyan]babb sync[/cyan] to pull the latest."
+        body = "Nothing indexed yet."
 
+    console.print(Panel(body.strip(), title=f"{BRAND} — now", border_style="cyan", padding=(1, 2)))
+
+
+def lore_entry(entry: dict):
     console.print(
         Panel(
-            body.strip(),
-            title=f"{BRAND} — now",
+            Markdown(entry["content"]),
+            title=f"[bold cyan]{entry['title']}[/bold cyan]",
             border_style="cyan",
             padding=(1, 2),
         )

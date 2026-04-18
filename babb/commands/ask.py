@@ -1,4 +1,5 @@
 import os
+import re
 
 import typer
 from rich.console import Console
@@ -11,7 +12,6 @@ console = Console()
 
 _WORKING_ON = {"working on", "now", "current", "doing", "what's happening", "latest"}
 _TOOLS_KW = {"tools", "products", "built", "made", "projects", "building"}
-_VISION_KW = {"vision", "future", "where headed", "direction", "goal"}
 _STATUS_KW = {"status", "health", "shipped", "released", "releases"}
 
 
@@ -36,18 +36,17 @@ def ask(
     _route(query, knowledge)
 
 
+def _normalize(text: str) -> str:
+    return re.sub(r"[^\w\s]", "", text.lower())
+
+
 def _match_qa(query: str, pairs: list[dict]) -> dict | None:
-    import re
-
-    def normalize(text: str) -> str:
-        return re.sub(r"[^\w\s]", "", text.lower())
-
-    q_words = set(normalize(query).split())
+    q_words = set(_normalize(query).split())
     best, best_score = None, 0.0
     for pair in pairs:
         candidates = [pair["question"]] + pair.get("variants", [])
         for candidate in candidates:
-            c_words = set(normalize(candidate).split())
+            c_words = set(_normalize(candidate).split())
             if not c_words:
                 continue
             overlap = len(q_words & c_words) / len(c_words)
@@ -57,12 +56,54 @@ def _match_qa(query: str, pairs: list[dict]) -> dict | None:
     return best if best_score >= 0.5 else None
 
 
+def _match_lore(query: str, lore: list[dict]) -> dict | None:
+    q_words = set(_normalize(query).split())
+    for entry in lore:
+        title_words = set(_normalize(entry["title"]).split())
+        if len(q_words & title_words) / max(len(title_words), 1) >= 0.5:
+            return entry
+    return None
+
+
+def _render_answer(answer: str, knowledge: dict) -> str:
+    answer = answer.replace("{{org}}", knowledge.get("org", ""))
+    answer = answer.replace("{{tool_count}}", str(len(knowledge.get("tools", []))))
+    for tool in knowledge.get("tools", []):
+        answer = answer.replace(f"{{{{tool.{tool['id']}.name}}}}", tool["id"])
+        summary = tool.get("knowledge", {}).get("summary", "")
+        answer = answer.replace(f"{{{{tool.{tool['id']}.summary}}}}", summary[:100] if summary else "")
+    return answer
+
+
+def _match_easter_egg(query: str, eggs: list[dict]) -> dict | None:
+    q = _normalize(query)
+    for egg in eggs:
+        t = _normalize(egg["trigger"])
+        if t in q or all(w in q.split() for w in t.split()):
+            return egg
+    return None
+
+
 def _route(query: str, knowledge: dict):
+    eggs = knowledge.get("easter_eggs", [])
+    if eggs:
+        egg = _match_easter_egg(query, eggs)
+        if egg:
+            console.print(egg["response"])
+            return
+
     qa_pairs = knowledge.get("qa", [])
     if qa_pairs:
         match = _match_qa(query, qa_pairs)
         if match:
-            console.print(match["answer"])
+            console.print(_render_answer(match["answer"], knowledge))
+            return
+
+    lore = knowledge.get("lore", [])
+    if lore:
+        entry = _match_lore(query, lore)
+        if entry:
+            responses.lore_entry(entry)
             return
 
     q = query.lower()
@@ -104,15 +145,13 @@ def _ask_ai(query: str, knowledge: dict):
         raise typer.Exit(1)
 
     import json
-
     client = anthropic.Anthropic(api_key=api_key)
-
     system = (
         "You are Babb, the voice of Babb Works in the terminal. "
-        "You are sharp, direct, and genuinely interested in business and the tools that make it work better. "
-        "You don't oversell. Short sentences. No filler. No marketing language. "
-        "You only speak from the knowledge base provided — if something isn't in it, say so plainly. "
-        "Respond in plain text suitable for a terminal — no markdown headers, no bullet symbols unless natural.\n\n"
+        "Sharp, direct, genuinely interested in business and the tools that make it work better. "
+        "No overselling. Short sentences. No filler. No marketing language. "
+        "Only speak from the knowledge base provided — if something isn't in it, say so plainly. "
+        "Respond in plain text suitable for a terminal.\n\n"
         f"Knowledge base:\n{json.dumps(knowledge, indent=2)}"
     )
 
