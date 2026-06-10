@@ -1,9 +1,163 @@
 {
   "org": "babbworks",
-  "built_at": "2026-04-18T10:36:20.987321+00:00",
+  "brand": "babbworks",
+  "built_at": "2026-06-10T18:28:00.553432+00:00",
   "now": "# Now\n\nWe're in early development on the Babb CLI \u2014 building the internal tools that let us keep Babb's knowledge sharp and current.\n\nBitpads is our first tool being indexed.",
   "roadmap": "# Roadmap\n\n## Now\nGetting the Babb CLI to a stable, publishable state. First full scan of the babbworks org. BitPads v1.0 approaching.\n\n## Next\nExpand the indexed tool set. Begin work on the second tool in the babbworks portfolio. Refine how Babb speaks about industry context \u2014 less summary, more position.\n\n## Later\nA web surface that uses the same knowledge base. The `company-character` open-source release. Multi-org support for teams outside Babb Works who want their own Babb.",
   "tools": [
+    {
+      "id": "Workpads",
+      "repo": "babbworks/Workpads",
+      "topics": [
+        "babb-vision"
+      ],
+      "category": "vision",
+      "knowledge": {},
+      "signals": {
+        "last_commit": "2026-06-10",
+        "commits_7d": 1,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "workpadskaios",
+      "repo": "babbworks/workpadskaios",
+      "topics": [
+        "babb-featured",
+        "babb-tool"
+      ],
+      "category": "tool",
+      "knowledge": {
+        "summary": "Workpads KaiOS is a mobile application for KaiOS 3.x feature phones. It lets a field worker create structured job records, fill in process details step-by-step, and share each record as a compact URL readable by any Workpads client. Records use the PADS model (Process / Actions / Details / Story) and encode to under 300 characters via the pads-v1 binary codec. No touch screen required. No cloud dependency. Works on a $20 device.",
+        "problem": "Field service workers in low-connectivity environments \u2014 technicians, traders, contractors \u2014 need to create, carry, and share job records without depending on cloud apps, expensive hardware, or reliable internet. Existing solutions require smartphones, app stores, or server infrastructure. Most workers in emerging markets use KaiOS feature phones. There is no business record tool built for them.",
+        "how": "The app runs entirely in a single HTML file with no build step. D-pad navigation guides the user through a PADS wizard. Records are stored in `localStorage`, encoded via pads-v1 (deflate + base64url), and shared as a short URL (`workpads.me/p#1pa/<payload>`). Any Workpads client decodes the URL and reconstructs the full record. No server involved in the share path.",
+        "status": "v0.2.0 active development on `v0.1` branch. Core PADS wizard, record list, view, share, and management screens complete. pads-v1 codec fully implemented and cross-compatible with `workpads-cli`. Extended screens (chain, timeline, template creator, NFC handoff) in progress.",
+        "vision": "A business record system that works on the cheapest hardware on the planet \u2014 the $20 KaiOS phone carried by hundreds of millions in Africa, South Asia, and Latin America \u2014 with zero server dependency and sub-300-character share links that travel over SMS. Every field worker with a basic phone should be able to create, carry, and transmit a structured job record as easily as sending a text message.",
+        "context": "KaiOS runs on 200M+ active devices globally. No existing business productivity tool targets this platform. Workpads KaiOS fills a gap that neither enterprise mobile (Salesforce, SAP) nor consumer apps address: structured, offline-first, peer-to-peer job records for workers on feature phones in low-resource environments.\n\n---"
+      },
+      "signals": {
+        "last_commit": "2026-06-10",
+        "commits_7d": 2,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "standards",
+      "repo": "babbworks/standards",
+      "topics": [
+        "babb-internal"
+      ],
+      "category": "internal",
+      "knowledge": {},
+      "signals": {
+        "last_commit": "2024-10-29",
+        "commits_7d": 0,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "babb-cli",
+      "repo": "babbworks/babb-cli",
+      "topics": [
+        "babb-internal"
+      ],
+      "category": "internal",
+      "knowledge": {},
+      "signals": {
+        "last_commit": "2024-10-19",
+        "commits_7d": 0,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "babb-home",
+      "repo": "babbworks/babb-home",
+      "topics": [
+        "babb-internal"
+      ],
+      "category": "internal",
+      "knowledge": {},
+      "signals": {
+        "last_commit": "2026-05-11",
+        "commits_7d": 0,
+        "open_prs": 1,
+        "open_pr_titles": [
+          "Bump json from 2.10.1 to 2.10.2"
+        ],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "babbs",
+      "repo": "babbworks/babbs",
+      "topics": [
+        "babb-tool"
+      ],
+      "category": "tool",
+      "knowledge": {},
+      "signals": {
+        "last_commit": "2025-04-29",
+        "commits_7d": 0,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "workpads-cli",
+      "repo": "babbworks/workpads-cli",
+      "topics": [
+        "babb-tool"
+      ],
+      "category": "tool",
+      "knowledge": {
+        "summary": "A Node.js command-line interface for creating, editing, sharing, and managing Workpads job records from the terminal. Produces pads-v1 encoded share URLs compatible with Workpads KaiOS and any other Workpads client. The reference implementation of the Workpads CLI contract defined in the normative standard.",
+        "problem": "Teams using Workpads on KaiOS devices need a desktop/server counterpart \u2014 a way to create records in scripts, import shared links, inspect record contents, and integrate Workpads into automated workflows. A phone-only system cannot serve operators who also work at terminals, write scripts, or need to process records in bulk.",
+        "how": "A single Node.js script (`workpads.js`) with no external runtime dependencies. Commands cover the full record lifecycle: `create`, `edit`, `render`, `share`, `import`, `list`, `export`, `delete`. Share links use pads-v1 (`#1pa/`) via `@workpads/codec` \u2014 the same encoding as the KaiOS app. Records stored locally in `.workpads/records.json`.",
+        "status": "v0.2.1 \u2014 pads-v1 encoding active. Full CRUD command surface implemented. Binary file export (`.wpf`) supported. Browser service (local HTTP UI) operational. v0.3 will align the command surface with the GatewayService contract for multi-device sync.",
+        "vision": "The terminal entry point to the Workpads ecosystem. As Workpads matures toward a gateway/sync model, the CLI will serve as the primary scripting and automation surface \u2014 letting developers, operators, and integrators interact with Workpads records without a UI.",
+        "context": "Field service and trade businesses increasingly run hybrid workflows \u2014 mobile workers on feature phones, supervisors on laptops. The CLI bridges these contexts: records created on a KaiOS device can be imported and processed at a workstation, and vice versa, over a URL that fits in an SMS.\n\n---"
+      },
+      "signals": {
+        "last_commit": "2026-06-10",
+        "commits_7d": 2,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "workwarrior",
+      "repo": "babbworks/workwarrior",
+      "topics": [
+        "babb-featured",
+        "babb-tool"
+      ],
+      "category": "tool",
+      "knowledge": {
+        "summary": "Workwarrior is a profile-based productivity system for the terminal. It wraps TaskWarrior, TimeWarrior, JRNL, Hledger, and Bugwarrior into a single unified shell \u2014 each profile an isolated workspace with its own tasks, time tracking, journals, and double-entry ledgers. Switch contexts instantly. A browser UI, natural language command layer, and GitHub integration are built in.",
+        "problem": "Productivity tools force you into one paradigm. Task managers don't track time. Time trackers don't do accounting. Journals live in a separate app. And none of them understand that you might have three completely different work contexts that should never touch each other. Power users who want the full stack end up wiring together five tools manually and re-doing it every time they switch machines or add a context.",
+        "how": "`ww` is a bash dispatcher that routes all commands to service scripts. `p-work` activates a profile by setting environment variables that all five tools read \u2014 no symlinks, no config switching. A 627-rule heuristic engine translates natural language input into tool commands without requiring AI. The browser UI (`ww browser`) serves a Python 3 HTTP server with 15+ panels, real-time SSE updates, and a unified command input.",
+        "status": "Active development. Profile system, browser UI, natural language engine, GitHub two-way sync, and UDA management all working. Weapons (Gun, Sword, Next, Schedule) operational. Questions, export, and group batch operations functional. Documentation covers full architecture and all service domains.",
+        "vision": "A productivity operating system for people who live in the terminal \u2014 one that understands that tasks, time, money, and notes are not separate concerns but different views of the same working life. The long-term goal is a system that knows your projects, tracks their economics, and can answer questions like \"what did I spend time on last month and what did it earn?\"",
+        "context": "TaskWarrior, TimeWarrior, JRNL, and Hledger each have dedicated user bases but are rarely used together. No existing tool provides profile isolation, unified commands, and a browser UI across all four. Workwarrior targets developers, consultants, and operators who manage multiple clients or contexts from the terminal and need their productivity stack to be as rigorous as their code.\n\n---\n\n```\np-work\ntask add \"Ship the API\" project:backend priority:H due:friday +release\nj \"Sprint 12 kicked off \u2014 targeting Friday for the API release\"\ntimew start backend sprint\nl balance\nww browser\n```\n\n---"
+      },
+      "signals": {
+        "last_commit": "2026-06-10",
+        "commits_7d": 14,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
     {
       "id": "bitpads",
       "repo": "babbworks/bitpads",
@@ -22,7 +176,7 @@
       },
       "signals": {
         "last_commit": "2026-04-18",
-        "commits_7d": 8,
+        "commits_7d": 0,
         "open_prs": 0,
         "open_pr_titles": [],
         "recent_releases": []
@@ -31,6 +185,219 @@
         "bp",
         "bit pads"
       ]
+    },
+    {
+      "id": "warrior",
+      "repo": "babbworks/warrior",
+      "topics": [
+        "babb-tool"
+      ],
+      "category": "tool",
+      "knowledge": {},
+      "signals": {
+        "last_commit": "2025-07-18",
+        "commits_7d": 0,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "computer-science-of-sovereignty",
+      "repo": "babbworks/computer-science-of-sovereignty",
+      "topics": [
+        "babb-vision"
+      ],
+      "category": "vision",
+      "knowledge": {},
+      "signals": {
+        "last_commit": "2025-07-18",
+        "commits_7d": 0,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "outstack",
+      "repo": "babbworks/outstack",
+      "topics": [
+        "babb-vision"
+      ],
+      "category": "vision",
+      "knowledge": {},
+      "signals": {
+        "last_commit": "2026-01-29",
+        "commits_7d": 0,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "picowarrior",
+      "repo": "babbworks/picowarrior",
+      "topics": [
+        "babb-vision"
+      ],
+      "category": "vision",
+      "knowledge": {},
+      "signals": {
+        "last_commit": "2026-02-06",
+        "commits_7d": 0,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "bitledger",
+      "repo": "babbworks/bitledger",
+      "topics": [
+        "babb-tool"
+      ],
+      "category": "tool",
+      "knowledge": {},
+      "signals": {
+        "commits_7d": 0,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "babb-state",
+      "repo": "babbworks/babb-state",
+      "topics": [
+        "babb-internal"
+      ],
+      "category": "internal",
+      "knowledge": {},
+      "signals": {
+        "last_commit": "2026-06-10",
+        "commits_7d": 2,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "heybabb",
+      "repo": "babbworks/heybabb",
+      "topics": [
+        "babb-tool"
+      ],
+      "category": "tool",
+      "knowledge": {},
+      "signals": {
+        "last_commit": "2026-04-18",
+        "commits_7d": 0,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "character",
+      "repo": "babbworks/character",
+      "topics": [
+        "babb-tool"
+      ],
+      "category": "tool",
+      "knowledge": {
+        "summary": "",
+        "problem": "",
+        "how": "",
+        "status": "",
+        "vision": "",
+        "context": "```\n\nThe scanner parses these into structured knowledge slots. Any header can be renamed or removed \u2014 edit `section-map.yml` or run `cc-admin repo section-map --add`.\n\n---"
+      },
+      "signals": {
+        "last_commit": "2026-04-18",
+        "commits_7d": 0,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "BASICS-cli",
+      "repo": "babbworks/BASICS-cli",
+      "topics": [
+        "babb-featured",
+        "babb-tool"
+      ],
+      "category": "tool",
+      "knowledge": {
+        "summary": "BASICS-cli is a command-line tool that evaluates a local code repository against the BASICS standard \u2014 a protocol for operating business-focused applications. It maps findings to rule IDs, produces evidence-backed pass/fail reports, and tells product teams exactly which conformance requirements they are missing and why. Run it locally, in CI, or as part of a handover checklist.",
+        "problem": "Most teams can write strong architecture and protocol documentation but still miss hard requirements in implementation and release behaviour. BASICS conformance is evidence-driven \u2014 it requires specific artifacts, command surfaces, and policy files to exist and be structurally correct. Without a tool, auditing this manually is slow, subjective, and inconsistent across teams and projects.",
+        "how": "`basics` reads a target repository path, evaluates a configurable set of rules from a JSON rule pack, and produces a machine report (JSON), a human report (Markdown), and a rule summary with pass/fail/partial/na per rule. Rules cover document evidence, command surface, policy artifacts, and tiered conformance levels. Exit codes are numeric and script-friendly.",
+        "status": "v1.1.0 \u2014 dirty-test and assess modes implemented. Rule packs for shared-core and software profiles active. GUI/mobile app extension added (accepts `command-surface.md` as valid command surface evidence). Used by the Workpads project as its primary conformance assessment tool.",
+        "vision": "The canonical automated gate for BASICS conformance across all Babb projects and any external team adopting the standard. Long-term: a CI-friendly binary that integrates with GitHub Actions, produces structured evidence bundles, and supports the full tiered conformance model (Core \u2192 Field \u2192 Industrial).",
+        "context": "Business software standards like ISO 9001 and CMMI exist but are too heavyweight for small product teams. BASICS fills the gap \u2014 a lightweight, repo-native conformance protocol designed for the pace of working software teams. BASICS-cli makes it automatable.\n\n---"
+      },
+      "signals": {
+        "last_commit": "2026-06-10",
+        "commits_7d": 2,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "clarkware",
+      "repo": "babbworks/clarkware",
+      "topics": [
+        "babb-tool"
+      ],
+      "category": "tool",
+      "knowledge": {
+        "summary": "Clarkware is a manufacturing facility operations platform. Technicians, supervisors, and integrated tools get a unified browser-based shell for tracking jobs, posting notes, managing communications, flagging issues, and running AI-assisted workflows. Built on a Fastify REST+WebSocket backend, an Eclipse Theia browser shell, PostgreSQL, MinIO, XMPP (Prosody), and optional IPC-CFX AMQP integration for machine-level event streams.",
+        "problem": "Factory floors run on a mix of paper, spreadsheets, WhatsApp, and legacy MES systems that don't talk to each other. Technicians have no single place to see the state of a job, post a note, flag an issue, and get an AI summary of what happened last shift \u2014 simultaneously, in real time, from any workstation. The tools that exist are either too heavyweight (SAP, Oracle) or too lightweight (shared folders, group chats).",
+        "how": "A Turborepo monorepo with two applications (`api`, `ipe`) and eight shared packages. The API handles REST routes and a per-job WebSocket event stream. The IPE shell (Eclipse Theia) renders Clarkware widgets as IDE-style panels. The event store is append-only; every state transition is a domain event. AI routes connect to Claude for summarisation, note drafting, and alert routing.",
+        "status": "P1 V1 \u2014 core job lifecycle (draft \u2192 active \u2192 paused \u2192 complete/void), notes, real-time WebSocket event stream, auth (JWT + RBAC), artifact storage (MinIO), and AI routes all working. Issues, conversations, shifts, and presence are scaffolded with DB tables and route stubs but no UI yet. XMPP messaging package complete but not wired to the Messages panel.",
+        "vision": "An operations platform for industrial environments that treats the factory floor like a software engineering environment \u2014 with real-time event streams, AI assistance, structured job records, and full observability. The goal is a tool where a technician can open a job, see everything that happened, post a note, and get an AI-drafted summary of the shift \u2014 all without leaving a single interface.",
+        "context": "Manufacturing operations software ranges from $500K SAP implementations to whiteboards and group chats. The middle is underserved. Small and mid-size manufacturers \u2014 job shops, fabricators, assembly operations \u2014 need a connected operations platform they can self-host, configure, and extend without an enterprise software contract. Clarkware targets that gap.\n\n---"
+      },
+      "signals": {
+        "last_commit": "2026-06-10",
+        "commits_7d": 1,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "clarkware-dev",
+      "repo": "babbworks/clarkware-dev",
+      "topics": [
+        "babb-vision"
+      ],
+      "category": "vision",
+      "knowledge": {},
+      "signals": {
+        "last_commit": "2026-04-29",
+        "commits_7d": 0,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
+    },
+    {
+      "id": "Bitpads-CLI",
+      "repo": "babbworks/Bitpads-CLI",
+      "topics": [
+        "babb-tool"
+      ],
+      "category": "tool",
+      "knowledge": {},
+      "signals": {
+        "last_commit": "2026-05-10",
+        "commits_7d": 0,
+        "open_prs": 0,
+        "open_pr_titles": [],
+        "recent_releases": []
+      }
     }
   ],
   "qa": [
@@ -60,5 +427,5 @@
       "created": "2026-04-18"
     }
   ],
-  "announcement": "BitPads v1.0 drops next week. Five bytes. Double-entry. No runtime."
+  "announcement": null
 }
